@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <title>Document</title>
+    <title> CotaBox Challenge</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="bg-primary">
-        <form action="/user" method="POST">
-            <input type="text" name="name" id="first-name" placeholder="First name" >
-            <input type="text" name="lastName" id="last-name" placeholder="Last name" >
-            <input type="text" name="participation" id="participation" placeholder="Participation">
+        <form action="/user" method="POST" onsubmit="formCheck(event, this)">
+            <input type="text" name="name" id="name" placeholder="First name" >
+            <input type="text" name="lastName" id="lastName" placeholder="Last name" >
+            <input type="number" name="participation" id="participation" placeholder="Participation">
             <button><b>SEND</b></button>
         </form>
     </header>
@@ -26,25 +26,22 @@
 
         <div id="container">
             <div id="table">
-                <table border="1px">
+                <table class="content-table">
                     <tr>
-                        <th>   </th>
+                        <th>  </th>
                         <th>First name</th>
                         <th>Last name</th>
                         <th>Participation</th>
                     </tr>
-                    <tr>
-                        <td>teste 1</td>
-                        <td>teste 2</td>
-                        <td>teste 3</td>
-                        <td>teste 4</td>
-                    </tr>
-                    <tr>
-                        <td>teste 1</td>
-                        <td>teste 2</td>
-                        <td>teste 3</td>
-                        <td>teste 4</td>
-                    </tr>
+                    <%users.forEach((user) =>{%>
+                        <tr>
+                            <td class="id"><%=id++%></td>
+                            <td><%=user.name%></td>
+                            <td><%=user.lastName%></td>
+                            <td class="participation"><%=user.participation%>%</td>
+                        </tr>
+
+                    <%})%>
                 </table>
             </div>
             <div id="pizza">
@@ -52,7 +49,19 @@
             </div>
 
         </div>
-
     </main>
 </body>
+<script>
+    function formCheck(event, form){
+        event.preventDefault()
+        let name = document.getElementById('name').value
+        let lastName = document.getElementById('lastName').value
+        let participation = document.getElementById('participation').value
+        if(name.length != 0 && lastName.length != 0 && participation.length != 0){
+            form.submit()
+        }else{
+            alert('Por favor, preencha todos os dados')
+        }
+    }
+</script>
 </html>

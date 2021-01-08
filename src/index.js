@@ -11,26 +11,21 @@ app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
-app.get('/', (req, res) =>{
-    res.render('index')
-})
-
-app.get('/users', async(req, res) =>{
+app.get('/', async(req, res) =>{
     try{
         let data = await Users.find()
-        console.log(data)
-        res.send(data)
+        res.render('index', {users:data, id:1})
     }catch(err){
-        res.status(400).json({err:'Error'})
+        res.status(400).json({err:err})
     }
 
 })
 
+
 app.post('/user', async(req, res) =>{
     try{
-        let data = await Users.create(req.body)
-        console.log(data)
-        res.send(data)
+        await Users.create(req.body)
+        res.redirect('/')
 
     }catch(err){
         res.status(400).json({err:err})
