@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,33 +25,101 @@
         </div>
 
         <div id="container">
-            <div id="table">
-                <table class="content-table">
+            <div onloadeddata="teste()">
+                <table  id="table" class="content-table">
                     <tr>
                         <th>  </th>
-                        <th>First name</th>
+                        <th class="testando">First name</th>
                         <th>Last name</th>
                         <th>Participation</th>
+                        <th>Ação</th>
                     </tr>
                     <%users.forEach((user) =>{%>
                         <tr>
-                            <td class="id"><%=id++%></td>
+
+                            <td><%=id++%></td>
                             <td><%=user.name%></td>
                             <td><%=user.lastName%></td>
-                            <td class="participation"><%=user.participation%>%</td>
+                            <td><%=user.participation%></td>
+                            <td>
+                                <form action="/deleteUser" method= 'POST' style="display: inline">
+                                    <input type="hidden" name="_id" value="<%= user._id %>">
+                                    <button>Deletar</button>
+                                </form>
+                            </td>
                         </tr>
-
+                        
                     <%})%>
+                    
                 </table>
             </div>
-            <div id="pizza">
-                AQUI VAI O GRAFICO DE PIZZA
+            <div class="relative">
+                <canvas id="myChart">
+                
+                </canvas>
             </div>
+
 
         </div>
     </main>
+
+    <footer>
+        Todos os direitos reservados.
+    </footer>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
 <script>
+
+    function getRandomRgb() {
+    var num = Math.round(0xffffff * Math.random());
+    var r = num >> 16;
+    var g = num >> 8 & 255;
+    var b = num & 255;
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    }
+
+
+    let table = document.getElementById('table'), sumVal = 0;   
+    let names = []
+    let participation = []
+    for(let i =1; i < table.rows.length; i++){
+        sumVal = sumVal + parseInt(table.rows[i].cells[3].innerHTML) 
+        names.push(table.rows[i].cells[1].innerHTML + ' ' + table.rows[i].cells[2].innerHTML)
+        participation.push(table.rows[i].cells[3].innerHTML)
+    }
+    console.log(sumVal)
+    console.log(names)
+    console.log(participation)
+
+
+    let backColor = []
+    for(let i = 0; i < names.length; i++){
+        backColor.push(getRandomRgb())
+    }
+    console.log(backColor)
+    let ctx = document.getElementById('myChart')
+    let myChart = new Chart(ctx,{
+        type: 'doughnut',
+    data: {
+        labels: names,
+        datasets: [{
+            data: participation,
+            backgroundColor: backColor
+                
+        ,
+
+            borderWidth: 5
+        }]
+    },
+    options:{
+        legend:{
+            display: true,
+            position:'right'
+        }
+    }
+
+    })
+
     function formCheck(event, form){
         event.preventDefault()
         let name = document.getElementById('name').value
@@ -63,5 +131,6 @@
             alert('Por favor, preencha todos os dados')
         }
     }
+    
 </script>
 </html>

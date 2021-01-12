@@ -33,6 +33,18 @@ app.post('/user', async(req, res) =>{
 
 })
 
+app.post('/deleteUser', async(req, res) =>{
+    try{
+        let _id = req.body._id
+        data =  await Users.deleteOne({_id:_id})
+        res.redirect('/')
+
+    }catch(err){
+        res.status(400).json({err:err})
+    }
+
+})
+
 app.listen(9000, () =>{
     console.log('The server is ON')
 })
